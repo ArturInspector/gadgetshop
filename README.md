@@ -7,11 +7,11 @@ This website was developed as a kyrgyz gadget shop project, featuring a clean de
 ---
 
 **Функционал / Features:**
-![Main Page](screenshots/home.png)
+![Main Page](screen/home.png)
 
 - Регистрация новых пользователей  
   *User registration*
-![Registartion](screenshots/registration.png)
+![Registartion](screen/registration.png)
 
 - Авторизация и выход из аккаунта  
   *User login and logout*
@@ -21,7 +21,7 @@ This website was developed as a kyrgyz gadget shop project, featuring a clean de
 
 - Просмотр каталога товаров  
   *Product catalog browsing*
-![Cart](screenshots/cart.png)
+![Cart](screen/cart.png)
 
 - Детальная страница товара  
   *Product detail pages*
@@ -34,7 +34,7 @@ This website was developed as a kyrgyz gadget shop project, featuring a clean de
 
 - Оформление заказа  
   *Order placement (checkout)*
-![Order](screenshots/pay.png)
+![Order](screen/pay.png)
 
 - История заказов пользователя  
   *User order history*
