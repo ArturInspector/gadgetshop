@@ -1,0 +1,134 @@
+{% extends "shop/base.html" %}
+
+{% block title %}Регистрация{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center px-4 py-6 bg-gradient-to-br from-[#1A1A1A] to-[#3B2F5B]">
+    <div class="max-w-md w-full backdrop-blur-lg bg-white/5 rounded-xl border border-white/10 shadow-2xl overflow-hidden transform transition-all duration-500 hover:scale-[1.02]">
+        <div class="p-8">
+            <h1 class="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-[#00BFFF] to-[#3B82F6] bg-clip-text text-transparent animate-fade-in">
+                Регистрация
+            </h1>
+
+            <form method="post" class="space-y-6">
+                {% csrf_token %}
+                
+                {% if form.errors %}
+                    <div class="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-lg animate-fade-in">
+                        <p class="font-medium">Пожалуйста, исправьте следующие ошибки:</p>
+                        <ul class="mt-2 list-disc list-inside">
+                            {% for field, errors in form.errors.items %}
+                                {% for error in errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+
+                <div class="space-y-4">
+                    <div class="relative">
+                        <label for="id_username" class="block text-sm font-medium text-[#D1D5DB] mb-2">
+                            <i class="fas fa-user mr-2"></i>Имя пользователя
+                        </label>
+                        <input type="text" name="username" id="id_username" required
+                               class="futuristic-input w-full px-4 py-3 rounded-lg"
+                               placeholder="Введите имя пользователя">
+                    </div>
+
+                    <div class="relative">
+                        <label for="id_email" class="block text-sm font-medium text-[#D1D5DB] mb-2">
+                            <i class="fas fa-envelope mr-2"></i>Email
+                        </label>
+                        <input type="email" name="email" id="id_email" required
+                               class="futuristic-input w-full px-4 py-3 rounded-lg"
+                               placeholder="Введите email">
+                    </div>
+
+                    <div class="relative">
+                        <label for="id_password1" class="block text-sm font-medium text-[#D1D5DB] mb-2">
+                            <i class="fas fa-lock mr-2"></i>Пароль
+                        </label>
+                        <input type="password" name="password1" id="id_password1" required
+                               class="futuristic-input w-full px-4 py-3 rounded-lg"
+                               placeholder="Введите пароль">
+                    </div>
+
+                    <div class="relative">
+                        <label for="id_password2" class="block text-sm font-medium text-[#D1D5DB] mb-2">
+                            <i class="fas fa-lock mr-2"></i>Подтверждение пароля
+                        </label>
+                        <input type="password" name="password2" id="id_password2" required
+                               class="futuristic-input w-full px-4 py-3 rounded-lg"
+                               placeholder="Повторите пароль">
+                    </div>
+                </div>
+
+                <button type="submit" 
+                        class="glow-button w-full py-3 rounded-lg">
+                    <i class="fas fa-user-plus mr-2"></i>Зарегистрироваться
+                </button>
+            </form>
+
+            <div class="mt-8 text-center">
+                <p class="text-[#D1D5DB]">
+                    <i class="fas fa-sign-in-alt mr-2"></i>Уже есть аккаунт? 
+                    <a href="{% url 'shop:login' %}" class="text-[#00BFFF] hover:text-[#3B82F6] transition-colors">
+                        Войти
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+@keyframes fade-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fade-in 0.5s ease-out;
+}
+
+@media (max-width: 640px) {
+    .max-w-md {
+        width: 100%;
+        margin: 0 1rem;
+    }
+}
+
+/* Стили для полей ввода */
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+    color: white !important;
+    caret-color: #00BFFF;
+    background-color: #2A2A2A !important;
+}
+
+input[type="email"]::placeholder,
+input[type="password"]::placeholder,
+input[type="text"]::placeholder {
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* Стили для автозаполнения */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+    -webkit-text-fill-color: white !important;
+    -webkit-box-shadow: 0 0 0px 1000px #2A2A2A inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Убираем стандартные стили браузера */
+input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    outline: none;
+}
+</style>
+{% endblock %} 

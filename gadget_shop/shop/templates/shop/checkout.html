@@ -1,0 +1,164 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block title %}
+    Оформление заказа
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .futuristic-input {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #FFFFFF;
+        transition: all 0.3s ease;
+        padding: 0.75rem 1rem; /* Увеличиваем padding для удобства */
+        border-radius: 0.5rem;
+    }
+    .futuristic-input:focus {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: #00BFFF;
+        box-shadow: 0 0 15px rgba(0, 191, 255, 0.3);
+        outline: none;
+    }
+    .glow-button {
+        background: linear-gradient(45deg, #00BFFF, #1E90FF);
+        box-shadow: 0 0 15px rgba(0, 191, 255, 0.5);
+        transition: all 0.3s ease;
+        color: white;
+        font-weight: 600;
+        border-radius: 0.5rem;
+        padding: 0.75rem 1.5rem;
+    }
+    .glow-button:hover {
+        transform: scale(1.02);
+        box-shadow: 0 0 25px rgba(0, 191, 255, 0.7);
+    }
+    .glass-panel {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 1rem;
+        padding: 2rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+    .gradient-text-pink {
+        background: linear-gradient(45deg, #FF69B4, #FF1493);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12">
+    <h1 class="text-4xl font-bold text-center mb-12 gradient-text animate-fade-in">Оформление заказа</h1>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <!-- Форма заказа -->
+        <div class="glass-panel fade-in">
+            <h2 class="text-2xl font-bold mb-8 text-white">Данные для доставки</h2>
+
+            <form method="post" class="space-y-6">
+                {% csrf_token %}
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="id_first_name" class="block text-sm font-medium text-[#D1D5DB] mb-2">Имя</label>
+                        <input type="text" name="first_name" id="id_first_name" required
+                               class="futuristic-input w-full">
+                    </div>
+                    <div>
+                        <label for="id_last_name" class="block text-sm font-medium text-[#D1D5DB] mb-2">Фамилия</label>
+                        <input type="text" name="last_name" id="id_last_name" required
+                               class="futuristic-input w-full">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="id_email" class="block text-sm font-medium text-[#D1D5DB] mb-2">Email</label>
+                    <input type="email" name="email" id="id_email" required
+                           class="futuristic-input w-full">
+                </div>
+
+                <div>
+                    <label for="id_address" class="block text-sm font-medium text-[#D1D5DB] mb-2">Адрес</label>
+                    <input type="text" name="address" id="id_address" required
+                           class="futuristic-input w-full">
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="id_postal_code" class="block text-sm font-medium text-[#D1D5DB] mb-2">Почтовый индекс</label>
+                        <input type="text" name="postal_code" id="id_postal_code" required
+                               class="futuristic-input w-full">
+                    </div>
+                    <div>
+                        <label for="id_city" class="block text-sm font-medium text-[#D1D5DB] mb-2">Город</label>
+                        <input type="text" name="city" id="id_city" required
+                               class="futuristic-input w-full">
+                    </div>
+                </div>
+
+                <div class="pt-6 flex justify-between space-x-4">
+                    <button type="submit" class="glow-button w-full text-center">
+                        <i class="fas fa-credit-card mr-2"></i>Оформить заказ
+                    </button>
+                </div>
+                <a href="{% url 'shop:cart' %}" class="w-full text-center bg-red-600 hover:bg-red-700 text-white font-semibold py-3 rounded-lg transition-colors shadow-lg shadow-red-500/30 mt-4 block">
+                     <i class="fas fa-times mr-2"></i>Отмена
+                </a>
+            </form>
+        </div>
+
+        <!-- Сводка заказа -->
+        <div class="glass-panel fade-in">
+            <h2 class="text-2xl font-bold mb-6 text-white">Ваш заказ</h2>
+
+            <div class="space-y-6">
+                {% for item in cart %}
+                    {% with product=item.product %}
+                        <div class="flex items-center justify-between py-4 border-b border-gray-700">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-16 h-16 flex-shrink-0">
+                                    {% if product.image %}
+                                        <img src="{{ product.image.url }}" alt="{{ product.name }}"
+                                             class="w-full h-full object-cover rounded-md">
+                                    {% else %}
+                                        <div class="w-16 h-16 bg-gray-800 rounded-md flex items-center justify-center">
+                                            <span class="text-gray-400 text-xs">Нет фото</span>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="font-medium text-white">{{ product.name }}</h3>
+                                    <p class="text-sm text-[#D1D5DB]">{{ item.quantity }} × {{ item.price }} сом</p>
+                                </div>
+                            </div>
+                            <div class="font-bold text-white">
+                                {{ item.total_price }} сом
+                            </div>
+                        </div>
+                    {% endwith %}
+                {% endfor %}
+
+                <div class="pt-4 space-y-4">
+                    <div class="flex justify-between text-lg text-white">
+                        <span class="font-medium">Подытог:</span>
+                        <span>{{ cart.get_total_price }} сом</span>
+                    </div>
+                    <div class="flex justify-between text-lg text-white">
+                        <span class="font-medium">Доставка:</span>
+                        <span>Бесплатно</span>
+                    </div>
+                    <div class="flex justify-between text-xl font-bold gradient-text-pink pt-4 border-t border-gray-700">
+                        <span>Итого к оплате:</span>
+                        <span>{{ cart.get_total_price }} сом</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

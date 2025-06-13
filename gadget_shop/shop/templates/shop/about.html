@@ -1,0 +1,114 @@
+{% extends 'shop/base.html' %}
+
+{% block title %}О нас - Globus Gadget{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-[#1A1A1A] to-[#3B2F5B] py-12">
+    <div class="container mx-auto px-4">
+        <!-- Заголовок -->
+        <div class="text-center mb-16">
+            <h1 class="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#00BFFF] to-[#FF69B4] mb-4">
+                О компании Globus Gadget
+            </h1>
+            <div class="w-24 h-1 bg-gradient-to-r from-[#00BFFF] to-[#FF69B4] mx-auto rounded-full"></div>
+        </div>
+
+        <!-- Основной контент -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <!-- Текстовая информация -->
+            <div class="space-y-8">
+                <div class="bg-[#2A2A2A]/50 backdrop-blur-lg rounded-2xl p-8 border border-[#3B2F5B]/30">
+                    <h2 class="text-2xl font-bold text-white mb-4">Наша история</h2>
+                    <p class="text-gray-300 leading-relaxed">
+                        Globus Gadget - это ведущая компания в Бишкеке, специализирующаяся на поставке качественных гаджетов из Китая. Мы работаем напрямую с производителями, что позволяет нам предлагать лучшие цены на рынке.
+                    </p>
+                </div>
+
+                <div class="bg-[#2A2A2A]/50 backdrop-blur-lg rounded-2xl p-8 border border-[#3B2F5B]/30">
+                    <h2 class="text-2xl font-bold text-white mb-4">Наши преимущества</h2>
+                    <ul class="space-y-4 text-gray-300">
+                        <li class="flex items-center">
+                            <i class="fas fa-check-circle text-[#00BFFF] mr-3"></i>
+                            Прямые поставки из Китая
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check-circle text-[#00BFFF] mr-3"></i>
+                            Гарантия на все товары
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check-circle text-[#00BFFF] mr-3"></i>
+                            Быстрая доставка по Кыргызстану
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check-circle text-[#00BFFF] mr-3"></i>
+                            Профессиональная поддержка
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Декоративные элементы и статистика -->
+            <div class="space-y-8">
+                <div class="bg-[#2A2A2A]/50 backdrop-blur-lg rounded-2xl p-8 border border-[#3B2F5B]/30">
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="text-center">
+                            <div class="text-4xl font-bold text-[#00BFFF] mb-2">1000+</div>
+                            <div class="text-gray-300">Довольных клиентов</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-4xl font-bold text-[#00BFFF] mb-2">500+</div>
+                            <div class="text-gray-300">Товаров в каталоге</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-4xl font-bold text-[#00BFFF] mb-2">24/7</div>
+                            <div class="text-gray-300">Поддержка</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-4xl font-bold text-[#00BFFF] mb-2">5+</div>
+                            <div class="text-gray-300">Лет на рынке</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Контакты -->
+                <div class="bg-[#2A2A2A]/50 backdrop-blur-lg rounded-2xl p-8 border border-[#3B2F5B]/30">
+                    <h2 class="text-2xl font-bold text-white mb-6">Свяжитесь с нами</h2>
+                    <div class="space-y-4">
+                        <div class="flex items-center text-gray-300">
+                            <i class="fas fa-map-marker-alt text-[#00BFFF] w-6"></i>
+                            <span class="ml-3">г. Бишкек, ул. Жукеева Пудовкина</span>
+                        </div>
+                        <div class="flex items-center text-gray-300">
+                            <i class="fas fa-phone text-[#00BFFF] w-6"></i>
+                            <span class="ml-3">+996 (555) 123-456</span>
+                        </div>
+                        <div class="flex items-center text-gray-300">
+                            <i class="fas fa-envelope text-[#00BFFF] w-6"></i>
+                            <span class="ml-3">info@globusgadget.kg</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Социальные сети -->
+        <div class="mt-16 text-center">
+            <h2 class="text-2xl font-bold text-white mb-8">Мы в социальных сетях</h2>
+            <div class="flex justify-center space-x-6">
+                <a href="#" class="text-3xl text-[#00BFFF] hover:text-[#FF69B4] transition-colors">
+                    <i class="fab fa-telegram"></i>
+                </a>
+                <a href="#" class="text-3xl text-[#00BFFF] hover:text-[#FF69B4] transition-colors">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="#" class="text-3xl text-[#00BFFF] hover:text-[#FF69B4] transition-colors">
+                    <i class="fab fa-facebook"></i>
+                </a>
+                <a href="#" class="text-3xl text-[#00BFFF] hover:text-[#FF69B4] transition-colors">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

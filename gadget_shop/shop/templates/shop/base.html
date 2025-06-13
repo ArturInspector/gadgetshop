@@ -1,0 +1,499 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Globus Gadget{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* Базовые стили */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1A1A1A 0%, #3B2F5B 100%);
+            min-height: 100vh;
+            color: #FFFFFF;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Анимированные линии */
+        .animated-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0;
+            animation: fadeIn 1.5s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .line {
+            position: absolute;
+            width: 2px;
+            background: linear-gradient(to bottom, 
+                transparent 0%,
+                rgba(0, 191, 255, 0.15) 20%,
+                rgba(0, 191, 255, 0.4) 50%,
+                rgba(0, 191, 255, 0.15) 80%,
+                transparent 100%
+            );
+            animation: lineAnimation 8s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+            opacity: 0;
+            transform-origin: top;
+            filter: blur(0.5px);
+        }
+
+        @keyframes lineAnimation {
+            0% {
+                transform: translateY(-100%) scaleY(0);
+                opacity: 0;
+            }
+            5% {
+                transform: translateY(0) scaleY(1);
+                opacity: 1;
+            }
+            95% {
+                transform: translateY(calc(100vh - 100%)) scaleY(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) scaleY(0);
+                opacity: 0;
+            }
+        }
+
+        /* Стили для мобильных устройств */
+        @media (max-width: 768px) {
+            .animated-lines .line {
+                /* Уменьшаем количество линий или делаем их менее заметными */
+                /* Вариант 1: Сделать линии менее прозрачными */
+                opacity: 0.2 !important; /* Снижаем прозрачность на мобильных */
+                
+                /* Вариант 2: Скрыть некоторые линии (можно сделать в JS, но CSS проще) */
+                /* Если линий много, этот способ может быть неэффективен */
+            }
+
+             /* Возможно, уменьшить высоту линий или скорость анимации */
+             @keyframes lineAnimation {
+                0% {
+                    transform: translateY(-50%) scaleY(0);
+                    opacity: 0;
+                }
+                5% {
+                    transform: translateY(0) scaleY(0.5);
+                    opacity: 0.5;
+                }
+                95% {
+                    transform: translateY(calc(100vh - 50%)) scaleY(0.5);
+                    opacity: 0.5;
+                }
+                100% {
+                    transform: translateY(100vh) scaleY(0);
+                    opacity: 0;
+                }
+            }
+        }
+
+        /* Остальные стили */
+        main {
+            flex: 1 0 auto;
+            padding-top: 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(0, 191, 255, 0.3);
+        }
+        .glow-button {
+            background: linear-gradient(45deg, #00BFFF, #1E90FF);
+            box-shadow: 0 0 15px rgba(0, 191, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+        .glow-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(0, 191, 255, 0.7);
+        }
+        .gradient-text {
+            background: linear-gradient(45deg, #00BFFF, #FF69B4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .discount-tag {
+            background: linear-gradient(45deg, #FF69B4, #FF1493);
+            box-shadow: 0 0 15px rgba(255, 105, 180, 0.5);
+        }
+        .futuristic-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #FFFFFF;
+            transition: all 0.3s ease;
+        }
+        .futuristic-input:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #00BFFF;
+            box-shadow: 0 0 15px rgba(0, 191, 255, 0.3);
+        }
+        .nav-tab {
+            position: relative;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        .nav-tab:hover {
+            color: #FFFFFF;
+        }
+        .nav-tab::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #00BFFF, #FF69B4);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        .nav-tab:hover::after {
+            transform: scaleX(1);
+        }
+        .nav-tab.active {
+            color: #FFFFFF;
+        }
+        .nav-tab.active::after {
+            transform: scaleX(1);
+        }
+        .auth-button {
+            background: linear-gradient(45deg, #00BFFF, #FF69B4);
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 191, 255, 0.3);
+        }
+        .auth-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(0, 191, 255, 0.5);
+        }
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: linear-gradient(45deg, #FF69B4, #FF1493);
+            color: white;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            box-shadow: 0 0 10px rgba(255, 105, 180, 0.5);
+        }
+        .mobile-menu {
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem;
+            background: rgba(0, 191, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 0.5rem;
+            color: white;
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+        .notification.show {
+            transform: translateX(0);
+        }
+        .delete-btn {
+            background: rgba(255, 69, 0, 0.1);
+            border: 1px solid rgba(255, 69, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        .delete-btn:hover {
+            background: rgba(255, 69, 0, 0.2);
+            transform: scale(1.05);
+        }
+
+        /* Мобильные стили для футера */
+        @media (max-width: 768px) {
+            .footer-social-icons {
+                justify-content: center;
+            }
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Анимированные линии -->
+    {% if request.resolver_match.url_name == 'welcome' %}
+    <div class="animated-lines" id="animated-lines"></div>
+    {% endif %}
+
+    <!-- Хедер -->
+    <header class="fixed w-full glass-effect z-50">
+        <nav class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <a href="{% url 'shop:welcome' %}" class="flex items-center space-x-2">
+                    <img src="{% static 'shop/images/logo.svg' %}" alt="Globus Gadget Logo" class="w-10 h-10">
+                    <span class="text-2xl font-bold gradient-text">Globus Gadget</span>
+                </a>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="{% url 'shop:welcome' %}" class="nav-tab {% if request.resolver_match.url_name == 'welcome' %}active{% endif %}">
+                        <i class="fas fa-home mr-2"></i>Главная
+                    </a>
+                    <a href="{% url 'shop:about' %}" class="nav-tab {% if request.resolver_match.url_name == 'about' %}active{% endif %}">
+                        <i class="fas fa-info-circle mr-2"></i>О нас
+                    </a>
+                    <a href="{% url 'shop:product_list' %}" class="nav-tab {% if request.resolver_match.url_name == 'product_list' %}active{% endif %}">
+                        <i class="fas fa-th-large mr-2"></i>Каталог
+                    </a>
+                    <div class="relative">
+                        <a href="{% url 'shop:cart' %}" class="nav-tab {% if request.resolver_match.url_name == 'cart' %}active{% endif %}">
+                            <i class="fas fa-shopping-cart mr-2"></i>Корзина
+                            {% with total_items=cart|length %}
+                                {% if total_items > 0 %}
+                                    <span class="cart-count">{{ total_items }}</span>
+                                {% endif %}
+                            {% endwith %}
+                        </a>
+                    </div>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'shop:profile' %}" class="nav-tab {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
+                            <i class="fas fa-user mr-2"></i>Профиль
+                        </a>
+                        <a href="{% url 'shop:logout' %}" class="nav-tab">
+                            <i class="fas fa-sign-out-alt mr-2"></i>Выйти
+                        </a>
+                    {% else %}
+                        <a href="{% url 'shop:login' %}" class="nav-tab {% if request.resolver_match.url_name == 'login' %}active{% endif %}">
+                            <i class="fas fa-sign-in-alt mr-2"></i>Войти
+                        </a>
+                        <a href="{% url 'shop:register' %}" class="nav-tab">
+                            <i class="fas fa-user-plus mr-2"></i>Регистрация
+                        </a>
+                    {% endif %}
+                </div>
+                <!-- Мобильное меню -->
+                <button class="md:hidden text-white hover:text-[#00BFFF] transition-colors" id="mobile-menu-button">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+            <!-- Мобильное меню -->
+            <div class="md:hidden hidden mobile-menu rounded-lg mt-4 p-4" id="mobile-menu">
+                <div class="flex flex-col space-y-4">
+                    <a href="{% url 'shop:welcome' %}" class="nav-tab {% if request.resolver_match.url_name == 'welcome' %}active{% endif %}">
+                        <i class="fas fa-home mr-2"></i>Главная
+                    </a>
+                    <a href="{% url 'shop:about' %}" class="nav-tab {% if request.resolver_match.url_name == 'about' %}active{% endif %}">
+                        <i class="fas fa-info-circle mr-2"></i>О нас
+                    </a>
+                    <a href="{% url 'shop:product_list' %}" class="nav-tab {% if request.resolver_match.url_name == 'product_list' %}active{% endif %}">
+                        <i class="fas fa-th-large mr-2"></i>Каталог
+                    </a>
+                    <div class="relative">
+                        <a href="{% url 'shop:cart' %}" class="nav-tab {% if request.resolver_match.url_name == 'cart' %}active{% endif %}">
+                            <i class="fas fa-shopping-cart mr-2"></i>Корзина
+                            {% with total_items=cart|length %}
+                                {% if total_items > 0 %}
+                                    <span class="cart-count">{{ total_items }}</span>
+                                {% endif %}
+                            {% endwith %}
+                        </a>
+                    </div>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'shop:profile' %}" class="nav-tab {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
+                            <i class="fas fa-user mr-2"></i>Профиль
+                        </a>
+                        <a href="{% url 'shop:logout' %}" class="auth-button text-center">
+                            <i class="fas fa-sign-out-alt mr-2"></i>Выйти
+                        </a>
+                    {% else %}
+                        <a href="{% url 'shop:login' %}" class="nav-tab {% if request.resolver_match.url_name == 'login' %}active{% endif %}">
+                            <i class="fas fa-sign-in-alt mr-2"></i>Войти
+                        </a>
+                        <a href="{% url 'shop:register' %}" class="auth-button text-center">
+                            <i class="fas fa-user-plus mr-2"></i>Регистрация
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Уведомление -->
+    <div id="notification" class="notification">
+        <div class="flex items-center space-x-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            <span id="notification-message"></span>
+        </div>
+    </div>
+
+    <!-- Основной контент -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Футер -->
+    <footer class="glass-effect mt-12 py-8">
+        <div class="container mx-auto px-4 text-center">
+            <div class="mb-4">
+                <span class="text-2xl font-bold gradient-text">Globus Gadget</span>
+            </div>
+            <div class="flex justify-end space-x-6 mb-4 footer-social-icons">
+                <a href="#" class="text-[#D1D5DB] hover:text-[#00BFFF] transition-colors">
+                    <i class="fab fa-facebook-f text-xl"></i>
+                </a>
+                <a href="#" class="text-[#D1D5DB] hover:text-[#00BFFF] transition-colors">
+                    <i class="fab fa-twitter text-xl"></i>
+                </a>
+                <a href="#" class="text-[#D1D5DB] hover:text-[#00BFFF] transition-colors">
+                    <i class="fab fa-instagram text-xl"></i>
+                </a>
+                <a href="#" class="text-[#D1D5DB] hover:text-[#00BFFF] transition-colors">
+                    <i class="fab fa-telegram-plane text-xl"></i>
+                </a>
+            </div>
+            <p class="text-sm text-[#D1D5DB]">&copy; 2025 Globus Gadget. Тестовая версия, БАДК им. К. Кольбаева.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Создание анимированных линий
+        function createAnimatedLines() {
+            const container = document.getElementById('animated-lines');
+            if (!container) return;
+            
+            const lineCount = 20;
+
+            for (let i = 0; i < lineCount; i++) {
+                const line = document.createElement('div');
+                line.className = 'line';
+                
+                // Случайная позиция по горизонтали с отступом от краев
+                const left = 5 + Math.random() * 90;
+                line.style.left = `${left}%`;
+                
+                // Увеличил высоту линий
+                const height = 200 + Math.random() * 400;
+                line.style.height = `${height}px`;
+                
+                // Уменьшил задержку для более частого появления
+                const delay = Math.random() * 6;
+                line.style.animationDelay = `${delay}s`;
+                
+                // Увеличил базовую прозрачность
+                const opacity = 0.4 + Math.random() * 0.5;
+                line.style.opacity = opacity;
+                
+                container.appendChild(line);
+            }
+        }
+
+        // Инициализация анимированных линий при загрузке страницы
+        document.addEventListener('DOMContentLoaded', createAnimatedLines);
+
+        // Мобильное меню
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Уведомления
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            const notificationMessage = document.getElementById('notification-message');
+            notificationMessage.textContent = message;
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Анимация появления элементов
+        document.addEventListener('DOMContentLoaded', () => {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            });
+
+            fadeElements.forEach(element => {
+                observer.observe(element);
+            });
+        });
+
+        // Эффект свечения для кнопок
+        document.querySelectorAll('.glow-button').forEach(button => {
+            button.addEventListener('mouseover', () => {
+                button.style.boxShadow = '0 0 25px rgba(0, 191, 255, 0.7)';
+            });
+            button.addEventListener('mouseout', () => {
+                button.style.boxShadow = '0 0 15px rgba(0, 191, 255, 0.5)';
+            });
+        });
+
+        // Добавляем обработчик для кнопок удаления
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (confirm('Вы уверены, что хотите удалить этот товар?')) {
+                    const form = this.closest('form');
+                    if (form) {
+                        form.submit();
+                    }
+                }
+            });
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html> 

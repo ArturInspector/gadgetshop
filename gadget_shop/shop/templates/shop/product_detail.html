@@ -1,0 +1,157 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block title %}{{ product.name }} - Gadget Shop{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Изображение товара -->
+        <div class="fade-in">
+            {% if product.image %}
+                <div class="glass-card rounded-lg overflow-hidden">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" 
+                         class="w-full h-auto object-contain">
+                </div>
+            {% else %}
+                <div class="glass-card rounded-lg h-96 flex items-center justify-center">
+                    <span class="text-[#D1D5DB]">Нет изображения</span>         з
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Информация о товаре -->
+        <div class="fade-in">
+            <h1 class="text-4xl font-bold mb-4 gradient-text">{{ product.name }}</h1>
+            
+            <div class="glass-effect p-6 rounded-lg mb-6">
+                <p class="text-[#D1D5DB] mb-6">{{ product.description }}</p>
+                
+                <div class="flex items-center justify-between mb-6">
+                    <span class="text-3xl font-bold">{{ product.price }} ₽</span>
+                    {% if product.available %}
+                        <span class="text-green-400">В наличии</span>
+                    {% else %}
+                        <span class="text-red-400">Нет в наличии</span>
+                    {% endif %}
+                </div>
+
+                {% if product.available %}
+                    <form action="{% url 'shop:cart_add' product.id %}" method="post" class="flex items-center gap-4 add-to-cart-form">
+                        {% csrf_token %}
+                        <div class="flex items-center">
+                            <label for="quantity" class="mr-2 text-[#D1D5DB]">Количество:</label>
+                            <input type="number" name="quantity" id="quantity" value="1" min="1" max="10"
+                                   class="futuristic-input w-20 px-3 py-2 rounded-lg">
+                        </div>
+                        <button type="submit" class="glow-button px-6 py-2 rounded-lg relative overflow-hidden">
+                            <span class="relative z-10">В корзину</span>
+                            <div class="add-to-cart-animation absolute inset-0 bg-[#00BFFF] transform scale-x-0 origin-left transition-transform duration-300"></div>
+                        </button>
+                    </form>
+                {% endif %}
+            </div>
+
+            <!-- Категория -->
+            <div class="glass-effect p-4 rounded-lg mb-6">
+                <h2 class="text-xl font-semibold mb-2">Категория</h2>
+                <a href="{{ product.category.get_absolute_url }}" 
+                   class="text-[#00BFFF] hover:text-[#1E90FF] transition-colors">
+                    {{ product.category.name }}
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Похожие товары -->
+    {% if similar_products %}
+        <div class="mt-12 fade-in">
+            <h2 class="text-3xl font-bold mb-6 gradient-text">Похожие товары</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for similar in similar_products %}
+                    <div class="glass-card rounded-lg overflow-hidden">
+                        <a href="{{ similar.get_absolute_url }}" class="block">
+                            {% if similar.image %}
+                                <img src="{{ similar.image.url }}" alt="{{ similar.name }}" 
+                                     class="w-full h-48 object-contain">
+                            {% else %}
+                                <div class="w-full h-48 bg-gray-800 flex items-center justify-center">
+                                    <span class="text-gray-400">Нет изображения</span>
+                                </div>
+                            {% endif %}
+                            <div class="p-4">
+                                <h3 class="text-xl font-semibold mb-2">{{ similar.name }}</h3>
+                                <p class="text-[#D1D5DB] mb-4">{{ similar.description|truncatewords:10 }}</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-2xl font-bold">{{ similar.price }} ₽</span>
+                                    <form action="{% url 'shop:cart_add' similar.id %}" method="post" class="inline add-to-cart-form">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button type="submit" class="glow-button px-4 py-2 rounded-lg relative overflow-hidden">
+                                            <span class="relative z-10">В корзину</span>
+                                            <div class="add-to-cart-animation absolute inset-0 bg-[#00BFFF] transform scale-x-0 origin-left transition-transform duration-300"></div>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Обработка добавления в корзину
+    const addToCartForms = document.querySelectorAll('.add-to-cart-form');
+    
+    addToCartForms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const button = this.querySelector('button');
+            const animation = button.querySelector('.add-to-cart-animation');
+            
+            // Запускаем анимацию
+            animation.style.transform = 'scaleX(1)';
+            
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showNotification('Товар добавлен в корзину');
+                    // Обновляем количество товаров в корзине в шапке
+                    const cartCount = document.querySelector('.cart-count');
+                    if (cartCount) {
+                        cartCount.textContent = data.cart_items_count;
+                    } else if (data.cart_items_count > 0) {
+                        // Если счетчика нет, но товары есть, создаем его
+                        const cartLink = document.querySelector('a[href*="cart"]');
+                        const countSpan = document.createElement('span');
+                        countSpan.className = 'cart-count ml-1 px-2 py-1 text-xs bg-[#00BFFF] rounded-full';
+                        countSpan.textContent = data.cart_items_count;
+                        cartLink.appendChild(countSpan);
+                    }
+                }
+            })
+            .finally(() => {
+                // Возвращаем анимацию в исходное состояние
+                setTimeout(() => {
+                    animation.style.transform = 'scaleX(0)';
+                }, 300);
+            });
+        });
+    });
+});
+</script>
+{% endblock %} 

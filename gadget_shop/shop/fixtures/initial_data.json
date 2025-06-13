@@ -1,0 +1,88 @@
+[
+    {
+        "model": "shop.category",
+        "pk": 1,
+        "fields": {
+            "name": "Смартфоны",
+            "slug": "smartphones"
+        }
+    },
+    {
+        "model": "shop.category",
+        "pk": 2,
+        "fields": {
+            "name": "Ноутбуки",
+            "slug": "laptops"
+        }
+    },
+    {
+        "model": "shop.product",
+        "pk": 1,
+        "fields": {
+            "category": 1,
+            "name": "iPhone 13 Pro",
+            "slug": "iphone-13-pro",
+            "description": "Самый мощный iPhone с потрясающей камерой и дисплеем ProMotion.",
+            "price": "99990.00",
+            "available": true,
+            "created": "2024-01-01T00:00:00Z",
+            "updated": "2024-01-01T00:00:00Z"
+        }
+    },
+    {
+        "model": "shop.product",
+        "pk": 2,
+        "fields": {
+            "category": 1,
+            "name": "Samsung Galaxy S21",
+            "slug": "samsung-galaxy-s21",
+            "description": "Флагманский смартфон с потрясающей камерой и мощным процессором.",
+            "price": "79990.00",
+            "available": true,
+            "created": "2024-01-01T00:00:00Z",
+            "updated": "2024-01-01T00:00:00Z"
+        }
+    },
+    {
+        "model": "shop.product",
+        "pk": 3,
+        "fields": {
+            "category": 2,
+            "name": "MacBook Pro 14",
+            "slug": "macbook-pro-14",
+            "description": "Мощный ноутбук с процессором M1 Pro и потрясающим дисплеем.",
+            "price": "199990.00",
+            "available": true,
+            "created": "2024-01-01T00:00:00Z",
+            "updated": "2024-01-01T00:00:00Z"
+        }
+    },
+    {
+        "model": "shop.product",
+        "pk": 4,
+        "fields": {
+            "category": 2,
+            "name": "Dell XPS 13",
+            "slug": "dell-xps-13",
+            "description": "Стильный ультрабук с безрамочным дисплеем и отличной производительностью.",
+            "price": "149990.00",
+            "available": true,
+            "created": "2024-01-01T00:00:00Z",
+            "updated": "2024-01-01T00:00:00Z"
+        }
+    },
+    {
+        "model": "shop.product",
+        "pk": 5,
+        "fields": {
+            "category": 1,
+            "name": "Google Pixel 6",
+            "slug": "google-pixel-6",
+            "description": "Смартфон с лучшей камерой на рынке и чистым Android.",
+            "price": "69990.00",
+            "available": true,
+            "created": "2024-01-01T00:00:00Z",
+            "updated": "2024-01-01T00:00:00Z"
+        }
+    }
+] 

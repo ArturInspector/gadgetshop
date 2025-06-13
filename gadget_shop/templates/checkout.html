@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-[#1A1A1A] to-[#3B2F5B] relative overflow-hidden">
+    <!-- Фоновые элементы -->
+    <div class="absolute inset-0 opacity-10">
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAzNGMwIDIuMjA5LTEuNzkxIDQtNCA0cy00LTEuNzkxLTQtNCAxLjc5MS00IDQtNCA0IDEuNzkxIDQgNHoiIGZpbGw9IiMwMEJGRkYiLz48L2c+PC9zdmc+')] opacity-20"></div>
+    </div>
+
+    <div class="container mx-auto px-4 py-8 relative z-10">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-3xl font-bold text-white mb-8 text-center">Оформление заказа</h1>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Форма заказа -->
+                <div class="backdrop-blur-lg bg-white/10 rounded-xl p-6 border border-white/20 shadow-lg">
+                    <h2 class="text-xl font-semibold text-white mb-4">Данные для доставки</h2>
+                    <form method="POST" class="space-y-4">
+                        {% csrf_token %}
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-white/80 mb-2">Имя</label>
+                                <input type="text" name="name" required
+                                    class="w-full px-4 py-2 bg-white/5 border border-white/20 rounded-lg text-white focus:ring-2 focus:ring-[#00BFFF] focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-white/80 mb-2">Email</label>
+                                <input type="email" name="email" required
+                                    class="w-full px-4 py-2 bg-white/5 border border-white/20 rounded-lg text-white focus:ring-2 focus:ring-[#00BFFF] focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-white/80 mb-2">Адрес</label>
+                                <textarea name="address" required
+                                    class="w-full px-4 py-2 bg-white/5 border border-white/20 rounded-lg text-white focus:ring-2 focus:ring-[#00BFFF] focus:border-transparent"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-white/80 mb-2">Телефон</label>
+                                <input type="tel" name="phone" required
+                                    class="w-full px-4 py-2 bg-white/5 border border-white/20 rounded-lg text-white focus:ring-2 focus:ring-[#00BFFF] focus:border-transparent">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Сводка заказа -->
+                <div class="backdrop-blur-lg bg-white/10 rounded-xl p-6 border border-white/20 shadow-lg">
+                    <h2 class="text-xl font-semibold text-white mb-4">Ваш заказ</h2>
+                    <div class="space-y-4">
+                        {% for item in cart_items %}
+                        <div class="flex items-center justify-between py-2 border-b border-white/10">
+                            <div class="flex items-center space-x-4">
+                                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="w-16 h-16 object-cover rounded-lg">
+                                <div>
+                                    <h3 class="text-white font-medium">{{ item.product.name }}</h3>
+                                    <p class="text-white/60">Количество: {{ item.quantity }}</p>
+                                </div>
+                            </div>
+                            <p class="text-white font-medium">{{ item.total_price }} ₽</p>
+                        </div>
+                        {% endfor %}
+                        
+                        <div class="pt-4 border-t border-white/20">
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-white/80">Итого:</span>
+                                <span class="text-xl font-bold text-white">{{ total_price }} ₽</span>
+                            </div>
+                            <button type="submit" class="w-full py-3 px-6 bg-gradient-to-r from-[#00BFFF] to-[#FF69B4] text-white font-semibold rounded-lg hover:opacity-90 transition-opacity">
+                                Подтвердить заказ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
