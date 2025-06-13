@@ -7,7 +7,7 @@ This website was developed as a kyrgyz gadget shop project, featuring a clean de
 ---
 
 **Функционал / Features:**
-![Main Page](screen/home.png)
+![Main Page](screen/main.png)
 
 - Регистрация новых пользователей  
   *User registration*
